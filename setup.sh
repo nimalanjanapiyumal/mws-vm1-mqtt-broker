@@ -18,17 +18,27 @@ fi
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y mosquitto mosquitto-clients ufw
 
-mkdir -p /var/log/mosquitto /etc/mosquitto/conf.d
+MOSQUITTO_LOG_DIR="/var/log/mosquitto"
+MOSQUITTO_LOG_FILE="$MOSQUITTO_LOG_DIR/mosquitto.log"
+
+mkdir -p "$MOSQUITTO_LOG_DIR" /etc/mosquitto/conf.d
 cp "$REPO_DIR/config/mosquitto_mws.conf" /etc/mosquitto/conf.d/mws.conf
 cp "$REPO_DIR/config/aclfile" /etc/mosquitto/aclfile
-chown mosquitto:mosquitto /etc/mosquitto/aclfile /var/log/mosquitto
-chmod 640 /etc/mosquitto/aclfile
+touch "$MOSQUITTO_LOG_FILE"
+chown mosquitto:mosquitto /etc/mosquitto/aclfile "$MOSQUITTO_LOG_DIR" "$MOSQUITTO_LOG_FILE"
+chmod 750 "$MOSQUITTO_LOG_DIR"
+chmod 640 /etc/mosquitto/aclfile "$MOSQUITTO_LOG_FILE"
 
 bash "$REPO_DIR/scripts/create_mqtt_users.sh"
 
 ufw allow from 192.168.1.0/24 to any port 1883 proto tcp || true
 systemctl enable mosquitto
-systemctl restart mosquitto
+if ! systemctl restart mosquitto; then
+  echo "[ERROR] Mosquitto failed to start. Recent service logs:"
+  journalctl -u mosquitto -n 80 --no-pager || true
+  echo "[ERROR] Check the active config with: sudo mosquitto -c /etc/mosquitto/mosquitto.conf -v"
+  exit 1
+fi
 sleep 2
 systemctl --no-pager status mosquitto || true
 

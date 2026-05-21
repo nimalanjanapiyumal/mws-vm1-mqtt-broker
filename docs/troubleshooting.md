@@ -5,8 +5,20 @@
 Check syntax and logs:
 
 ```bash
-sudo mosquitto -c /etc/mosquitto/conf.d/mws.conf -v
+sudo systemctl status mosquitto --no-pager -l
 sudo journalctl -u mosquitto -n 80 --no-pager
+sudo mosquitto -c /etc/mosquitto/mosquitto.conf -v
+```
+
+If the log file or password file permissions are the cause, repair them and restart:
+
+```bash
+sudo bash scripts/create_mqtt_users.sh
+sudo touch /var/log/mosquitto/mosquitto.log
+sudo chown mosquitto:mosquitto /etc/mosquitto/passwd /etc/mosquitto/aclfile /var/log/mosquitto /var/log/mosquitto/mosquitto.log
+sudo chmod 750 /var/log/mosquitto
+sudo chmod 640 /etc/mosquitto/passwd /etc/mosquitto/aclfile /var/log/mosquitto/mosquitto.log
+sudo systemctl restart mosquitto
 ```
 
 ## Clients cannot connect
