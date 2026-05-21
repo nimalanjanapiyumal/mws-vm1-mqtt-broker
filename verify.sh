@@ -5,7 +5,7 @@ source config/credentials.env 2>/dev/null || source config/credentials.env.examp
 
 echo "[CHECK] Hostname and IP"
 hostnamectl --static
-ip -4 addr | grep -E '192\.168\.1\.10|inet ' || true
+ip -4 addr | grep -E '192\.168\.1\.71|inet ' || true
 
 echo "[CHECK] Mosquitto service"
 systemctl is-active mosquitto

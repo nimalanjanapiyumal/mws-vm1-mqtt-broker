@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-STATIC_IP="192.168.1.10/24"
+STATIC_IP="192.168.1.71/24"
 GATEWAY="192.168.1.1"
 DNS1="8.8.8.8"
 DNS2="1.1.1.1"

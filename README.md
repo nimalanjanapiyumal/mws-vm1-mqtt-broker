@@ -5,7 +5,7 @@ This repository configures VM1 as the Mosquitto MQTT broker for the Metronia Wat
 ## VM details
 
 - Hostname: `mws-mqtt-broker`
-- Static IP: `192.168.1.10/24`
+- Static IP: `192.168.1.71/24`
 - Gateway: `192.168.1.1`
 - MQTT port: `1883`
 - Authentication: Mosquitto password file
