@@ -33,6 +33,7 @@ bash "$REPO_DIR/scripts/create_mqtt_users.sh"
 
 ufw allow from 192.168.1.0/24 to any port 1883 proto tcp || true
 systemctl enable mosquitto
+systemctl reset-failed mosquitto || true
 if ! systemctl restart mosquitto; then
   echo "[ERROR] Mosquitto failed to start. Recent service logs:"
   journalctl -u mosquitto -n 80 --no-pager || true
