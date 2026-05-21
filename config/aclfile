@@ -1,0 +1,14 @@
+# Mosquitto ACL for MWS Assessment 2
+# Principle: sensor publishes only its own telemetry/alerts; operator reads only required monitoring topics.
+
+user sensor01
+topic write mws/water/quality/sensor01/telemetry
+topic write mws/water/quality/sensor01/alerts
+
+user operator01
+topic read mws/water/quality/+/telemetry
+topic read mws/water/quality/+/alerts
+
+# Read-only lab test account. It is intentionally blocked from publishing.
+user lab_test
+topic read mws/water/quality/+/telemetry
